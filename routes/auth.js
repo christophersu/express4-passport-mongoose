@@ -1,20 +1,21 @@
 var express = require('express');
 var router = express.Router();
 
-var secrets = require('./config/secrets');
+var secrets = require('../config/secrets');
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FacebookStrategy({
-    clientID: secrets.Secrets.FACEBOOK.CLIENT_ID,
-    clientSecret: secrets.Secrets.FACEBOOK.CLIENT_SECRET,
+    clientID: secrets.FACEBOOK.CLIENT_ID,
+    clientSecret: secrets.FACEBOOK.CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    User.findOrCreate(..., function(err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
+    // User.findOrCreate(..., function(err, user) {
+    //   if (err) { return done(err); }
+    //   done(null, user);
+    // });
+    console.log(profile);
   }
 ));
 
