@@ -15,15 +15,15 @@ passport.use(new FacebookStrategy({
     //   if (err) { return done(err); }
     //   done(null, user);
     // });
-    console.log(profile);
+    
   }
 ));
 
 // Redirect the user to Facebook for authentication.  When complete,
 // Facebook will redirect the user back to the application at
 //     /auth/facebook/callback
-router.get('/auth/facebook',
-  passport.authenticate('facebook', { scope: ['email'] })
+router.get('/facebook',
+  passport.authenticate('facebook', { scope: ['public_profile', 'email'] })
 );
 
 // Facebook will redirect the user to this URL after approval.  Finish the
