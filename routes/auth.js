@@ -1,6 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/footprints');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+
+});
+var userModel = require('../models/user');
+var User = mongoose.model('User');
+
 var secrets = require('../config/secrets');
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy;
@@ -11,11 +21,23 @@ passport.use(new FacebookStrategy({
     callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    // User.findOrCreate(..., function(err, user) {
-    //   if (err) { return done(err); }
-    //   done(null, user);
-    // });
-    
+    User.findOne({facebookId: profile["_json"]["id"]}, function(result) {
+        if (result) {
+            console.log('User found.');
+            console.log(result);
+        }
+        else {
+            var newUser = new User({
+                name: profile["_json"]["name"],
+                email: profile["_json"]["email"],
+                facebookId: profile["_json"]["id"]
+            });
+            newUser.save(function(err, user) {
+                console.log('User created.');
+                console.log(user);
+            });
+        }
+    });
   }
 ));
 
