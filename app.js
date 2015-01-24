@@ -10,7 +10,7 @@ var users = require('./routes/users');
 
 var app = express();
 
-var secrets = require('secrets');
+var secrets = require('./config/secrets');
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy;
 
