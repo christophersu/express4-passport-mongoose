@@ -10,6 +10,23 @@ var users = require('./routes/users');
 
 var app = express();
 
+var secrets = require('secrets');
+var passport = require('passport')
+  , FacebookStrategy = require('passport-facebook').Strategy;
+
+passport.use(new FacebookStrategy({
+    clientID: secrets.Secrets.FACEBOOK.CLIENT_ID,
+    clientSecret: secrets.Secrets.FACEBOOK.CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate(..., function(err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
+));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
